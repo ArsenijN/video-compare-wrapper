@@ -1,0 +1,23 @@
+#!/bin/bash
+# Convert smb:// URLs to KIO-fuse paths
+
+convert_path() {
+    local url="$1"
+    if [[ "$url" == smb://* ]]; then
+        # Find the actual kio-fuse directory
+        local kio_dir=$(ls -t /run/user/$UID/ | grep '^kio-fuse-' | head -n1)
+        # Remove smb:// prefix and reconstruct path
+        local smb_path="${url#smb://}"
+        echo "/run/user/$UID/$kio_dir/smb/$smb_path"
+    else
+        echo "$url"
+    fi
+}
+
+ARG1=$(convert_path "$1")
+ARG2=$(convert_path "$2")
+
+echo "Left:  $ARG1"
+echo "Right: $ARG2"
+
+video-compare "$ARG1" "$ARG2"
