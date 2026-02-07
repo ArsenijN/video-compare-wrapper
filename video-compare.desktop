@@ -7,4 +7,4 @@ Actions=compareVideos
 [Desktop Action compareVideos]
 Name=Compare Videos
 Icon=kdenlive
-Exec=/home/arsen/bin/video-compare-dolphin %U
+Exec=/home/USERNAME/bin/video-compare-dolphin %U
