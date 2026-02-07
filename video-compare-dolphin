@@ -1,0 +1,23 @@
+#!/bin/bash
+# Dolphin video compare wrapper
+
+# Convert all arguments
+FILES=()
+for arg in "$@"; do
+    if [[ "$arg" == smb://* ]]; then
+        kio_dir=$(ls -t /run/user/$UID/ | grep '^kio-fuse-' | head -n1)
+        smb_path="${arg#smb://}"
+        FILES+=("/run/user/$UID/$kio_dir/smb/$smb_path")
+    else
+        FILES+=("$arg")
+    fi
+done
+
+# Check if we have exactly 2 files
+if [ ${#FILES[@]} -ne 2 ]; then
+    kdialog --error "Please select exactly 2 video files to compare"
+    exit 1
+fi
+
+# Run video-compare with absolute path
+/home/linuxbrew/.linuxbrew/bin/video-compare "${FILES[0]}" "${FILES[1]}"
